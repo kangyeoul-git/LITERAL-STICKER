@@ -24,7 +24,7 @@ const App: React.FC = () => {
       setAppState(AppState.RESULT);
     } catch (error) {
       console.error(error);
-      setErrorMsg("Bridge disconnected.");
+      setErrorMsg("CONNECTION LOST");
       setAppState(AppState.ERROR);
     }
   };
@@ -36,58 +36,30 @@ const App: React.FC = () => {
   };
 
   return (
-    // Use dynamic viewport height (h-[100dvh] equivalent style)
-    <div className="w-screen flex flex-col overflow-hidden font-sans bg-black text-white" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
+    <div className="w-screen h-screen bg-black text-white flex flex-col items-center justify-center overflow-hidden relative">
       
-      {/* Intro Page */}
-      {appState === AppState.INTRO && (
-        <Intro onStart={handleStart} />
-      )}
+      {/* INTRO LAYER */}
+      <div className={`absolute inset-0 z-50 transition-opacity duration-1000 ease-in-out ${appState === AppState.INTRO ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+         {appState === AppState.INTRO && <Intro onStart={handleStart} />}
+      </div>
 
-      {/* Main App (Visible after Intro) */}
-      {appState !== AppState.INTRO && (
-        <main className="flex-1 w-full h-full relative animate-fade-in flex flex-col items-center justify-center">
-          
-          {/* Header removed for pure black immersion */}
-          
-          <div className="w-full h-full max-w-lg mx-auto flex flex-col">
-            {appState === AppState.ERROR ? (
-                 <div className="w-full h-full flex flex-col items-center justify-center space-y-6">
-                    <div className="text-red-500 text-xs border border-red-900/30 bg-red-950/10 p-4 tracking-widest uppercase font-bold">
-                        {errorMsg || "System Failure"}
-                    </div>
-                    <button 
-                        onClick={handleRetake}
-                        className="text-white/50 text-[10px] tracking-widest hover:text-white uppercase"
-                    >
-                        Reset Connection
-                    </button>
-                 </div>
-            ) : appState === AppState.RESULT && generatedImage ? (
-              <StickerPreview 
-                imageUrl={generatedImage} 
-                onRetake={handleRetake} 
-              />
-            ) : (
-              <Camera 
-                appState={appState} 
-                setAppState={setAppState} 
-                onCapture={handleCapture} 
-              />
-            )}
-          </div>
-        </main>
-      )}
-      
-      <style>{`
-        .animate-fade-in {
-            animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-      `}</style>
+      {/* MAIN APP LAYER */}
+      <div className={`w-full h-full transition-opacity duration-1000 delay-300 ease-in-out flex items-center justify-center ${appState === AppState.INTRO ? 'opacity-0' : 'opacity-100'}`}>
+         
+         {appState === AppState.ERROR ? (
+             <div className="text-center space-y-4">
+                 <p className="text-red-600 font-heavy text-xs tracking-widest">{errorMsg}</p>
+                 <button onClick={handleRetake} className="text-white border-b border-white pb-1 text-xs tracking-widest uppercase">Reset</button>
+             </div>
+         ) : appState === AppState.RESULT && generatedImage ? (
+             <StickerPreview imageUrl={generatedImage} onRetake={handleRetake} />
+         ) : (
+             // Only render camera if we are not in INTRO or RESULT to save resources
+             appState !== AppState.INTRO && appState !== AppState.RESULT && (
+                <Camera appState={appState} setAppState={setAppState} onCapture={handleCapture} />
+             )
+         )}
+      </div>
     </div>
   );
 };

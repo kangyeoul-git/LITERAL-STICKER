@@ -12,15 +12,23 @@
         :root {
             --vh: 100vh;
         }
-        body { 
+        body, html { 
             background-color: #000000; 
             margin: 0; 
-            /* Fix for mobile pull-to-refresh and scroll bounce */
-            overscroll-behavior-y: none;
+            padding: 0;
+            overscroll-behavior: none;
             overflow: hidden;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-            color: white;
+            font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .font-heavy {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
         }
     </style>
   <script type="importmap">

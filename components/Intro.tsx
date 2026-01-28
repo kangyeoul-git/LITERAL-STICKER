@@ -5,32 +5,22 @@ interface IntroProps {
 }
 
 const Intro: React.FC<IntroProps> = ({ onStart }) => {
-  const [isExiting, setIsExiting] = useState(false);
+  const [fade, setFade] = useState(false);
 
-  const handleStartClick = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      onStart();
-    }, 800); // Wait for fade out
+  const handleClick = () => {
+    setFade(true);
+    setTimeout(onStart, 600); // Trigger state change after fade starts
   };
 
   return (
     <div 
-      className={`absolute inset-0 z-50 flex flex-col items-center justify-center bg-black transition-opacity duration-1000 ease-in-out ${isExiting ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      onClick={handleClick}
+      className={`w-full h-full flex items-center justify-center bg-black cursor-pointer select-none transition-opacity duration-700 ${fade ? 'opacity-0' : 'opacity-100'}`}
     >
-      <button 
-        onClick={handleStartClick}
-        className="group flex flex-col items-center justify-center text-center cursor-pointer select-none"
-        aria-label="Enter Application"
-      >
-        <h1 className="text-white text-6xl md:text-8xl font-[900] tracking-tighter leading-[0.85] uppercase transition-transform duration-500 group-hover:scale-105 group-active:scale-95">
-          LITERAL<br />
-          STICKER
-        </h1>
-        {/* Invisible hit area expansion for better mobile UX */}
-        <div className="absolute inset-0 w-full h-full" />
-      </button>
-      
+      <h1 className="text-white text-6xl md:text-8xl font-heavy leading-[0.85] tracking-tighter text-center uppercase mix-blend-difference hover:scale-105 transition-transform duration-500">
+        LITERAL<br />
+        STICKER
+      </h1>
     </div>
   );
 };
