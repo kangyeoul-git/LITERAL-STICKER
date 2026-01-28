@@ -36,7 +36,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden font-sans bg-black text-white">
+    // Use dynamic viewport height (h-[100dvh] equivalent style)
+    <div className="w-screen flex flex-col overflow-hidden font-sans bg-black text-white" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
       
       {/* Intro Page */}
       {appState === AppState.INTRO && (
@@ -45,25 +46,21 @@ const App: React.FC = () => {
 
       {/* Main App (Visible after Intro) */}
       {appState !== AppState.INTRO && (
-        <main className="flex-1 w-full h-full relative animate-fade-in flex flex-col">
+        <main className="flex-1 w-full h-full relative animate-fade-in flex flex-col items-center justify-center">
           
-          {/* Subtle Indicator / Branding - kept minimal */}
-          <div className="absolute top-6 w-full text-center z-40 opacity-30 pointer-events-none">
-             <div className="w-1 h-1 bg-white rounded-full mx-auto mb-2"></div>
-             <p className="text-[8px] tracking-[0.4em] uppercase">Literal Sticker</p>
-          </div>
-
-          <div className="flex-1 w-full h-full">
+          {/* Header removed for pure black immersion */}
+          
+          <div className="w-full h-full max-w-lg mx-auto flex flex-col">
             {appState === AppState.ERROR ? (
                  <div className="w-full h-full flex flex-col items-center justify-center space-y-6">
-                    <div className="text-red-500 text-xs border border-red-900/30 bg-red-950/10 p-4 tracking-widest uppercase">
+                    <div className="text-red-500 text-xs border border-red-900/30 bg-red-950/10 p-4 tracking-widest uppercase font-bold">
                         {errorMsg || "System Failure"}
                     </div>
                     <button 
                         onClick={handleRetake}
-                        className="text-white/50 text-[10px] tracking-widest hover:text-white"
+                        className="text-white/50 text-[10px] tracking-widest hover:text-white uppercase"
                     >
-                        RESET
+                        Reset Connection
                     </button>
                  </div>
             ) : appState === AppState.RESULT && generatedImage ? (
@@ -84,11 +81,11 @@ const App: React.FC = () => {
       
       <style>{`
         .animate-fade-in {
-            animation: fadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
       `}</style>
     </div>

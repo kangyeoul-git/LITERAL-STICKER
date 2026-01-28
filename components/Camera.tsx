@@ -45,7 +45,7 @@ const Camera: React.FC<CameraProps> = ({ appState, setAppState, onCapture }) => 
     const canvas = document.createElement('canvas');
     const video = videoRef.current;
     
-    // Maintain aspect ratio but ensure high quality
+    // Maintain aspect ratio
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     
@@ -84,54 +84,54 @@ const Camera: React.FC<CameraProps> = ({ appState, setAppState, onCapture }) => 
 
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-black">
+    <div className="w-full h-full flex flex-col items-center justify-center bg-black relative">
         
-      {/* Compact Frame Container */}
-      <div className="relative w-full max-w-[90vw] md:max-w-md aspect-[4/5] bg-[#111] overflow-hidden rounded-sm border border-white/10 shadow-2xl">
+      {/* Compact Frame Container - Pure Black, No Borders, Floating in Void */}
+      <div className="relative w-full aspect-[4/5] bg-black overflow-hidden max-h-[70vh]">
           {/* Video Feed */}
           <video
             ref={videoRef}
             autoPlay
             playsInline
             muted
-            className={`w-full h-full object-cover transform scale-x-[-1] transition-all duration-700 ${appState === AppState.PROCESSING ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+            className={`w-full h-full object-cover transform scale-x-[-1] transition-all duration-700 ${appState === AppState.PROCESSING ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100'}`}
           />
 
-          {/* Countdown Overlay */}
+          {/* Countdown Overlay - Huge & Bold */}
           {appState === AppState.COUNTDOWN && countdown > 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px] z-20">
-                <span className="text-9xl font-light text-white font-sans tracking-tighter animate-ping">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
+                <span className="text-[12rem] font-[900] text-white tracking-tighter animate-pulse leading-none">
                 {countdown}
                 </span>
             </div>
           )}
 
-          {/* Processing State in Frame */}
+          {/* Processing State - Minimal Text */}
           {appState === AppState.PROCESSING && (
             <div className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-black">
-              <div className="w-12 h-12 border-2 border-white/20 border-t-white rounded-full animate-spin mb-6"></div>
-              <p className="text-white/60 font-sans text-[10px] tracking-[0.2em] uppercase animate-pulse">
-                Converting to Asset
+              <div className="w-8 h-8 border-t-2 border-white rounded-full animate-spin mb-8"></div>
+              <p className="text-white font-[900] text-xl tracking-[0.2em] uppercase animate-pulse">
+                PROCESSING
               </p>
             </div>
           )}
           
-          {/* Corner Guides */}
-          <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/30"></div>
-          <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-white/30"></div>
-          <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-white/30"></div>
-          <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/30"></div>
+          {/* Subtle Crop Marks - Only visual cue */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white mix-blend-difference"></div>
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white mix-blend-difference"></div>
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white mix-blend-difference"></div>
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white mix-blend-difference"></div>
       </div>
 
-      {/* Capture Button (Outside Frame) */}
+      {/* Capture Button (Outside Frame) - Minimal Ring */}
       {appState === AppState.IDLE && (
-        <div className="mt-12 flex justify-center z-20">
+        <div className="absolute bottom-[10%] left-0 right-0 flex justify-center z-20">
           <button
             onClick={() => setAppState(AppState.COUNTDOWN)}
-            className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center bg-transparent hover:bg-white/5 active:scale-95 transition-all duration-300"
+            className="w-20 h-20 rounded-full border-2 border-white flex items-center justify-center bg-transparent active:scale-90 transition-all duration-200"
             aria-label="Capture"
           >
-            <div className="w-12 h-12 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+            <div className="w-16 h-16 bg-white rounded-full"></div>
           </button>
         </div>
       )}
