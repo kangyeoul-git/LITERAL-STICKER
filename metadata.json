@@ -1,0 +1,7 @@
+{
+  "name": "Literal Sticker (Black Ver.)",
+  "description": "Transform your expression into a pure black background asset instantly.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
